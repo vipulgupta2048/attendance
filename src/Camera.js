@@ -6,7 +6,7 @@ var VisualRecognitionV3 = require("ibm-watson/visual-recognition/v3");
 const visualRecognition = new VisualRecognitionV3({
   version: "2018-03-19",
   disable_ssl_verification: true,
-  iam_apikey: "s5WVbUWhmLuHMHI10NQ5eT43vElm-RCDjIkUxfM78OFf"
+  iam_apikey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 });
 
 class Camera extends React.Component {
