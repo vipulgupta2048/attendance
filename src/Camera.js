@@ -1,6 +1,6 @@
 import React from "react";
 import Webcam from "react-webcam";
-// var base64ToImage = require("base64-to-image");
+var base64Img = require("base64-img");
 var VisualRecognitionV3 = require("ibm-watson/visual-recognition/v3");
 
 const visualRecognition = new VisualRecognitionV3({
@@ -12,7 +12,7 @@ const visualRecognition = new VisualRecognitionV3({
 class Camera extends React.Component {
   state = {
     imageData: null,
-    url: ""
+    image: []
   };
 
   setRef = webcam => {
@@ -24,10 +24,13 @@ class Camera extends React.Component {
     this.setState({
       imageData: imageSrc
     });
+    base64Img.img(this.state.imageData, "", "image.jpg", function(
+      err,
+      filepath
+    ) {});
 
-    //  FIX THISSS
-    // base64Img.img(this.state.imageData, "", "1", function(err, filepath) {});
-
+    console.log("Saving the picture");
+  };
 
   onClickRetake = e => {
     e.persist();
@@ -37,18 +40,32 @@ class Camera extends React.Component {
   };
 
   onClickUpload = () => {
-    const detectFacesParams = {
-      images_file: this.state.imageData
+    var images_file = "./image.jpg";
+    var classifier_ids = ["DefaultCustomModel_869488859"];
+    var threshold = 0.75;
+    var params = {
+      images_file: images_file,
+      classifier_ids: classifier_ids,
+      threshold: threshold
     };
-
-    visualRecognition
-      .detectFaces(detectFacesParams)
-      .then(detectedFaces => {
-        console.log(JSON.stringify(detectedFaces, null, 2));
-      })
-      .catch(err => {
-        console.log("error:", err);
-      });
+    visualRecognition.classify(params, function(err, response) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(JSON.stringify(response, null, 2));
+      }
+    });
+    // const detectFacesParams = {
+    //   images_file: this.state.imageData
+    // };
+    // visualRecognition
+    //   .detectFaces(detectFacesParams)
+    //   .then(detectedFaces => {
+    //     console.log(JSON.stringify(detectedFaces, null, 2));
+    //   })
+    //   .catch(err => {
+    //     console.log("error:", err);
+    //   });
   };
 
   render() {
