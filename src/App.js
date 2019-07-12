@@ -7,7 +7,7 @@ class App extends React.Component {
     return (
       <div className="attendance">
         <h1>Scan for Attendance</h1>
-        <Camera />;
+        <Camera />
       </div>
     );
   }

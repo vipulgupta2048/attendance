@@ -24,12 +24,8 @@ class Camera extends React.Component {
     this.setState({
       imageData: imageSrc
     });
-    base64Img.img(this.state.imageData, "", "image.jpg", function(
-      err,
-      filepath
-    ) {});
-
-    console.log("Saving the picture");
+    var filepath = base64Img.imgSync(imageSrc, "", "2");
+    console.log(filepath);
   };
 
   onClickRetake = e => {
@@ -40,7 +36,7 @@ class Camera extends React.Component {
   };
 
   onClickUpload = () => {
-    var images_file = "./image.jpg";
+    var images_file = "./2.jpg";
     var classifier_ids = ["DefaultCustomModel_869488859"];
     var threshold = 0.75;
     var params = {
