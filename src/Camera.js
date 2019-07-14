@@ -29,7 +29,7 @@ class Camera extends React.Component {
     });
     axios({
       method: "POST",
-      url: "http://localhost:3002/users",
+      url: "http://localhost:3100/users",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
       },
