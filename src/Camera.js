@@ -1,19 +1,22 @@
 import React from "react";
 import Webcam from "react-webcam";
-var base64Img = require("base64-img");
-var VisualRecognitionV3 = require("ibm-watson/visual-recognition/v3");
-
-const visualRecognition = new VisualRecognitionV3({
-  version: "2018-03-19",
-  disable_ssl_verification: true,
-  iam_apikey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-});
+// var VisualRecognitionV3 = require("ibm-watson/visual-recognition/v3");
+// var FileSaver = require("file-saver");
+const axios = require("axios");
+var qs = require("qs");
 
 class Camera extends React.Component {
   state = {
     imageData: null,
-    image: []
+    image: [],
+    data: []
   };
+
+  comppnentDidMount() {
+    fetch("/users")
+      .then(res => res.json())
+      .then(users => this.setState({ data: users }));
+  }
 
   setRef = webcam => {
     this.webcam = webcam;
@@ -24,8 +27,14 @@ class Camera extends React.Component {
     this.setState({
       imageData: imageSrc
     });
-    var filepath = base64Img.imgSync(imageSrc, "", "2");
-    console.log(filepath);
+    axios({
+      method: "POST",
+      url: "http://localhost:3002/users",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+      },
+      data: qs.stringify({ data: imageSrc })
+    });
   };
 
   onClickRetake = e => {
@@ -35,34 +44,7 @@ class Camera extends React.Component {
     });
   };
 
-  onClickUpload = () => {
-    var images_file = "./2.jpg";
-    var classifier_ids = ["DefaultCustomModel_869488859"];
-    var threshold = 0.75;
-    var params = {
-      images_file: images_file,
-      classifier_ids: classifier_ids,
-      threshold: threshold
-    };
-    visualRecognition.classify(params, function(err, response) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(JSON.stringify(response, null, 2));
-      }
-    });
-    // const detectFacesParams = {
-    //   images_file: this.state.imageData
-    // };
-    // visualRecognition
-    //   .detectFaces(detectFacesParams)
-    //   .then(detectedFaces => {
-    //     console.log(JSON.stringify(detectedFaces, null, 2));
-    //   })
-    //   .catch(err => {
-    //     console.log("error:", err);
-    //   });
-  };
+  onClickUpload = () => {};
 
   render() {
     const videoConstraints = {
@@ -90,6 +72,18 @@ class Camera extends React.Component {
             <span>
               <button onClick={this.onClickRetake}>Retake Picture</button>
             </span>
+            {this.state.data ? (
+              <div>
+                <p>
+                  Welcome {this.state.data.name}, to Amity University. YOu have
+                  been marked present for the day.
+                </p>
+                <p>
+                  If this is not you, please retake the picture or call the IT
+                  department!
+                </p>
+              </div>
+            ) : null}
           </div>
         ) : null}
       </div>
