@@ -31,16 +31,8 @@ app.use(
 );
 
 app.use(function(err, req, res, next) {
-  //   res.header("Access-Control-Allow-Origin", "localhost:3000");
-  //   res.header(
-  //     "Access-Control-Allow-Headers",
-  //     "Origin, X-Requested-With, Content-Type, Accept"
-  //   );
-  //   res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-  // render the error page
   res.status(err.status || 500);
   res.render("error");
 

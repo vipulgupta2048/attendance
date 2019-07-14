@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "file-saver": "^2.0.2",
     "ibm-watson": "^4.2.1",
     "qs": "^6.7.0",
     "react": "^16.8.6",

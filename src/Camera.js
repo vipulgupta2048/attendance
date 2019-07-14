@@ -1,7 +1,5 @@
 import React from "react";
 import Webcam from "react-webcam";
-// var VisualRecognitionV3 = require("ibm-watson/visual-recognition/v3");
-// var FileSaver = require("file-saver");
 const axios = require("axios");
 var qs = require("qs");
 
