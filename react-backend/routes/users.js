@@ -30,7 +30,7 @@ function decodeBase64Image(dataString) {
 }
 
 //  Face Detection
-function identification(visualRecognition, params) {
+function identification(visualRecognition, params, filepath) {
   visualRecognition.detectFaces(params, function(err, response) {
     if (err) {
       console.log(err);
@@ -50,6 +50,15 @@ function identification(visualRecognition, params) {
         });
     }
   });
+  setTimeout(function() {
+    var images_file = fs.createReadStream(filepath);
+    var classifier_ids = ["DefaultCustomModel_869488859"];
+    var params = {
+      images_file: images_file,
+      classifier_ids: classifier_ids
+    };
+    recognition(visualRecognition, params);
+  }, 3000);
 }
 
 //  Face Recognition
@@ -82,14 +91,7 @@ function request(data) {
       var params = {
         images_file: images_file
       };
-      identification(visualRecognition, params);
-      var images_file = fs.createReadStream(filepath);
-      var classifier_ids = ["DefaultCustomModel_869488859"];
-      var params = {
-        images_file: images_file,
-        classifier_ids: classifier_ids
-      };
-      recognition(visualRecognition, params);
+      identification(visualRecognition, params, filepath);
     });
   } catch (error) {
     console.log("ERROR:", error);
@@ -97,13 +99,17 @@ function request(data) {
 }
 
 router.get("/", function(req, res, next) {
-  res.json([
-    {
-      id: 1,
-      name: app.get("class"),
-      score: app.get("score")
-    }
-  ]);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  data = {
+    id: 1,
+    name: app.get("class"),
+    score: app.get("score")
+  };
+  res.json(data);
 });
 
 module.exports = router;

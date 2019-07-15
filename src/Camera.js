@@ -6,16 +6,12 @@ var qs = require("qs");
 class Camera extends React.Component {
   state = {
     imageData: null,
-    image: [],
     data: []
   };
 
-  comppnentDidMount() {
-    axios({
-      method: "GET",
-      url: "http://localhost:3100/users"
-    }).then(res => console.log("dsfdsfds"));
-  }
+  //   componentDidMount() {
+  // console.log(this.state.data);
+  //   }
 
   setRef = webcam => {
     this.webcam = webcam;
@@ -43,7 +39,16 @@ class Camera extends React.Component {
     });
   };
 
-  onClickUpload = () => {};
+  onClickUpload = () => {
+    fetch("http://localhost:3100/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(jsondata => console.log(jsondata));
+  };
 
   render() {
     const videoConstraints = {
@@ -54,6 +59,7 @@ class Camera extends React.Component {
     return (
       <div>
         <Webcam
+          className="camera"
           audio={false}
           ref={this.setRef}
           screenshotFormat="image/jpeg"
