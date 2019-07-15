@@ -11,9 +11,10 @@ class Camera extends React.Component {
   };
 
   comppnentDidMount() {
-    fetch("/users")
-      .then(res => res.json())
-      .then(users => this.setState({ data: users }));
+    axios({
+      method: "GET",
+      url: "http://localhost:3100/users"
+    }).then(res => console.log("dsfdsfds"));
   }
 
   setRef = webcam => {
